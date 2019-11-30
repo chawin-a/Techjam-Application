@@ -1,7 +1,7 @@
 import operator
 import re
 from http import HTTPStatus
-import subprocess
+import os
 
 from flask import Flask, jsonify, request
 import math
@@ -134,5 +134,6 @@ def closest_pair():
     f.write(str(n)+'\n')
     for robot, position in robots.items():
         f.write(str(position["x"]) + " " + str(position["y"])+"\n")
-    f.close()  
-    return '', HTTPStatus.OK  
+    f.close()
+    output = float(os.popen('webapp/closestpair < webapp/in').read())
+    return jsonify(distance=f"{output:.3f}"), HTTPStatus.OK  

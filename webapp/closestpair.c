@@ -69,12 +69,11 @@ double closest_pair(int left,int right)
 }
 int main()
 {
-    FILE  *fp = fopen("in", "r");
     int n,i;
-    fscanf(fp,"%d",&n);
+    scanf("%d",&n);
     for(i=0;i<n;i++)
     {
-        fscanf(fp,"%lf %lf",&a[i].x,&a[i].y);
+        scanf("%lf %lf",&a[i].x,&a[i].y);
     }
     qsort(a,n,sizeof(P),cmpx);
     MIN=closest_pair(0,n-1);
