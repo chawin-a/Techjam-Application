@@ -29,7 +29,32 @@ def calculate_distance():
     return jsonify(distance=result), HTTPStatus.OK
 
 
-# robot_re = re.compile(r"^robot#([1-9][0-9]*)$")
+robot_re = re.compile(r"^robot#([1-9][0-9]*)$")
+
+robots = {}
+
+@app.route("/robot/<robot_id>/position", methods=['PUT'])
+def update_position(robot_id):
+    body = request.get_json()
+    if not robot_re.match(robot_id):
+        return '', HTTPStatus.BAD_REQUEST
+
+    if robot_id in robots:
+        status = HTTPStatus.NO_CONTENT  # 204
+    else:
+        status = HTTPStatus.CREATED  # 201
+
+    robots[robot_id] = {"position":body['position']}
+
+    return '', HTTPStatus.OK
+
+@app.route("/robot/<robot_id>/position", methods=['GET'])
+def get_position(robot_id):
+    if not robot_re.match(robot_id):
+        return '', HTTPStatus.BAD_REQUEST
+    if robot_id not in robots:
+        return '', HTTPStatus.NOT_FOUND
+    return jsonify(robots[robot_id]), HTTPStatus.OK
 
 # @app.route("/robot/<robot_id>/position", methods='PUT')
 # def update_position(robot_id):
