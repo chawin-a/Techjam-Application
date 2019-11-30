@@ -18,7 +18,7 @@ def distance(pos1, pos2, metric="euclidean"):
             p = 2
         else:
             raise Exception("Error")
-        return math.pow(math.pow(pos1["x"] - pos2["x"], p) + math.pow(pos1["y"] - pos2["y"], p),(1/p))
+        return math.pow(math.pow(math.abs(pos1["x"] - pos2["x"]), p) + math.pow(math.abs(pos1["y"] - pos2["y"]), p),(1/p))
     except:
         raise Exception("Error")
 
