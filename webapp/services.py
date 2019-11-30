@@ -7,17 +7,24 @@ import math
 
 app = Flask(__name__)
 
-def distance(pos1, pos2):
-    return math.sqrt(math.pow(pos1["x"] - pos2["x"], 2) + math.pow(pos1["y"] - pos2["y"], 2))
+def distance(pos1, pos2, metric):
+    if metric == "manhattan":
+        p = 1
+    elif metric == "euclidean":
+        p = 2
+    return math.pow(math.pow(pos1["x"] - pos2["x"], p) + math.pow(pos1["y"] - pos2["y"], p),(1/p))
 
 @app.route("/distance", methods=['POST'])
 def calculate_distance():
     body = request.get_json()
+    met = "euclidean"
     if 'first_pos' not in body or 'second_pos' not in body:
         return '', HTTPStatus.BAD_REQUEST
+    if 'metric' in body:
+        met = body['metric']
     pos1 = body['first_pos']
     pos2 = body['second_pos']
-    result = distance(pos1, pos2)
+    result = distance(pos1, pos2, met)
     result = f"{result:.3f}"
     return jsonify(distance=result), HTTPStatus.OK
 
