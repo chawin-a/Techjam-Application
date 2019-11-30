@@ -11,8 +11,6 @@ robots = {}
 app = Flask(__name__)
 def distance(pos1, pos2, metric="euclidean"):
     try:
-        print(pos1)
-        print(pos2)
         if metric == "manhattan":
             p = 1
         elif metric == "euclidean":
@@ -104,15 +102,11 @@ def get_nearest():
     if "ref_position" not in body:
         return '', HTTPStatus.BAD_REQUEST
     ref = body["ref_position"]
-    print(ref)
+    
     try:
         result = []
         dis = 999999999999
-        print("esfjlsdf")
-        print(robots)
         for robot, position in robots.items():
-            print(robot)
-            print(position)
             d = distance(position, ref)
             if dis > d + 1e-9:
                 dis = d
@@ -125,61 +119,3 @@ def get_nearest():
     return jsonify(robot_ids=result), HTTPStatus.OK
 
 
-
-# @app.route("/robot/<robot_id>/position", methods='PUT')
-# def update_position(robot_id):
-#     if not robot_re.match(robot_id):
-#         return '', HTTPStatus.BAD_REQUEST
-#     body = request.get_json()
-#     return '', HTTPStatus.OK
-
-# variable_re = re.compile(r"[A-Za-z][A-Za-z0-9_]*")
-# func_map = {
-#     '+': operator.add,
-#     '-': operator.sub,
-#     '*': operator.mul,
-#     '/': operator.truediv,
-# }
-
-# variables = {}
-
-
-# @app.route("/calc", methods=['POST'])
-# def calculate_expression():
-#     body = request.get_json()
-#     left, op, right = body['expression'].split()
-
-#     left = _get_value(left)
-#     right = _get_value(right)
-
-#     result = func_map[op](left, right)
-#     result = f"{result:.2f}"
-#     return jsonify(result=result), HTTPStatus.OK
-
-
-# def _get_value(token):
-#     if variable_re.fullmatch(token):
-#         value = variables[token]
-#     else:
-#         value = token
-#     return float(value)
-
-
-# @app.route("/variable/<name>", methods=['PUT'])
-# def put_variable(name):
-#     body = request.get_json()
-#     if name in variables:
-#         status = HTTPStatus.NO_CONTENT  # 204
-#     else:
-#         status = HTTPStatus.CREATED  # 201
-#     variables[name] = body['value']
-#     return '', status
-
-
-# @app.route("/variable/<name>", methods=['GET'])
-# def get_variable(name):
-#     if name not in variables:
-#         return '', HTTPStatus.NOT_FOUND
-#     value = variables[name]
-#     value = f"{float(value):.2f}"
-#     return jsonify(value=value), HTTPStatus.OK
