@@ -1,6 +1,7 @@
 import operator
 import re
 from http import HTTPStatus
+import subprocess
 
 from flask import Flask, jsonify, request
 import math
@@ -124,4 +125,14 @@ def get_nearest():
 
     return jsonify(robot_ids=result), HTTPStatus.OK
 
-
+@app.route("/closestpair", methods=['GET'])
+def closest_pair():
+    n = len(robots) 
+    if len(robots) < 2:
+        return '', HTTPStatus.FAILED_DEPENDENCY
+    f = open('webapp/in', "w")
+    f.write(str(n)+'\n')
+    for robot, position in robots.items():
+        f.write(str(position["x"]) + " " + str(position["y"])+"\n")
+    f.close()  
+    return '', HTTPStatus.OK  
