@@ -101,18 +101,24 @@ def get_nearest():
 
     if "ref_position" not in body:
         return '', HTTPStatus.BAD_REQUEST
+    k = 1
+    if "k" in body:
+        try:
+            k = int(body["k"])
+        except:
+            return '', HTTPStatus.BAD_REQUEST
     ref = body["ref_position"]
-    
+
     try:
         result = []
         dis = 999999999999
-        for robot, position in robots.items():
-            d = distance(position, ref)
-            if dis > d + 1e-9:
-                dis = d
-                result = []
-            if d >= dis - 1e-9 and d <= dis + 1e-9:
-                result.append(robot)
+        d = [ (distance(position, ref), robot) for robot, position in robots.items()]
+        d.sort()
+        result = [i[1] for i in d[:k]]
+            # d = distance(position, ref)
+            # if dis > d:
+            #     dis = d
+            #     result = [robot]
     except:
         return '', HTTPStatus.BAD_REQUEST
 
