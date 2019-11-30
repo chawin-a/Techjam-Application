@@ -6,7 +6,6 @@ from flask import Flask, jsonify, request
 import math
 
 app = Flask(__name__)
-
 def distance(pos1, pos2, metric):
     if metric == "manhattan":
         p = 1
